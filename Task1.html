@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorting Algorithms</title>
+</head>
+<body>
+<h1>Sorting Algorithms</h1>
+<button onclick="generateRandomNumbers()">Generate Numbers</button>
+<button onclick="sortArray('quickSort')">Quick Sort</button>
+<button onclick="sortArray('mergeSort')">Merge Sort</button>
+<button onclick="sortArray('bubbleSort')">Bubble Sort</button>
+<p id="unsortedData"></p>
+<p id="sortedData"></p>
+
+<script>
+function generateRandomNumbers() {
+  var numbers = [];
+  for (var i = 0; i < 100; i++) {
+    numbers.push(Math.floor(Math.random() * 1000)); // Generating random integers between 0 to 999
+  }
+  document.getElementById("unsortedData").innerText = "Unsorted Data: " + numbers.join('; ');
+  return numbers;
+}
+
+function sortArray(algorithm) {
+  var numbers = generateRandomNumbers().slice(); // Cloning the array to avoid modifying the original
+  var sortedNumbers;
+  switch (algorithm) {
+    case 'quickSort':
+      sortedNumbers = quickSort(numbers);
+      break;
+    case 'mergeSort':
+      sortedNumbers = mergeSort(numbers);
+      break;
+    case 'bubbleSort':
+      sortedNumbers = bubbleSort(numbers);
+      break;
+    default:
+      return;
+  }
+  document.getElementById("sortedData").innerText = "Sorted Data: " + sortedNumbers.join('; ');
+}
+
+function quickSort(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  var pivot = arr[Math.floor(arr.length / 2)];
+  var left = [];
+  var right = [];
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else if (arr[i] > pivot) {
+      right.push(arr[i]);
+    }
+  }
+
+  return quickSort(left).concat(pivot, quickSort(right));
+}
+
+function mergeSort(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  var mid = Math.floor(arr.length / 2);
+  var left = arr.slice(0, mid);
+  var right = arr.slice(mid);
+
+  function merge(left, right) {
+    var result = [];
+    while (left.length && right.length) {
+      if (left[0] < right[0]) {
+        result.push(left.shift());
+      } else {
+        result.push(right.shift());
+      }
+    }
+    return result.concat(left, right);
+  }
+
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+function bubbleSort(arr) {
+  var len = arr.length;
+  for (var i = 0; i < len - 1; i++) {
+    for (var j = 0; j < len - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        var temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+  return arr;
+}
+</script>
+</body>
+</html>
